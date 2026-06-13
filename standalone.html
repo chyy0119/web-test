@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-SPORT 运动人格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f0ff;
+            color: #333;
+            line-height: 1.6;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23e8b4ff" opacity="0.5"/><circle cx="20" cy="20" r="1.5" fill="%23e8b4ff" opacity="0.3"/><circle cx="80" cy="80" r="1" fill="%23e8b4ff" opacity="0.4"/><circle cx="80" cy="20" r="1.5" fill="%23e8b4ff" opacity="0.3"/><circle cx="20" cy="80" r="1" fill="%23e8b4ff" opacity="0.4"/></svg>');
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.15);
+            border-radius: 16px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #e8b4ff;
+            position: relative;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            width: 80px;
+            height: 20px;
+            background-color: #d8b4fe;
+            border-radius: 10px;
+            z-index: -1;
+        }
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 100px;
+            height: 20px;
+            background-color: #c084fc;
+            border-radius: 10px;
+            z-index: -1;
+        }
+        h1 {
+            text-align: center;
+            color: #8b5cf6;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(139, 92, 246, 0.2);
+        }
+        h2 {
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #6d28d9;
+            margin-bottom: 15px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 2px solid #e9d5ff;
+            border-radius: 12px;
+            background-color: #fdf4ff;
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        }
+        .question p {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #6d28d9;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            padding: 12px 16px;
+            border: 2px solid #e9d5ff;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(232, 180, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        .option:hover::before {
+            left: 100%;
+        }
+        .option:hover {
+            background-color: #faf5ff;
+            border-color: #d8b4fe;
+            transform: translateX(5px);
+        }
+        .option.selected {
+            background-color: #8b5cf6;
+            color: white;
+            border-color: #7c3aed;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #8b5cf6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        .button:hover::before {
+            left: 100%;
+        }
+        .button:hover {
+            background-color: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .result {
+            text-align: center;
+            padding: 40px;
+            background-color: #fdf4ff;
+            border-radius: 16px;
+            margin-top: 30px;
+            border: 2px solid #e9d5ff;
+            position: relative;
+        }
+        .result::before {
+            content: '🏃‍♀️';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 30px;
+            background-color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+        .result::after {
+            content: '🧘‍♀️';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 30px;
+            background-color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+        .result h2 {
+            color: #7c3aed;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .result p {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #5b21b6;
+        }
+        .personality-info {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            border: 2px solid #e9d5ff;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        }
+        .personality-info h3 {
+            color: #6d28d9;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .personality-info p {
+            line-height: 1.8;
+            color: #333;
+            text-align: left;
+        }
+        .sport-recommendations {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #faf5ff;
+            border-radius: 12px;
+            border: 2px solid #e9d5ff;
+            position: relative;
+        }
+        .sport-recommendations::before {
+            content: '⚽';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 25px;
+            background-color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+        .sport-recommendations h3 {
+            color: #6d28d9;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .sport-recommendations ul {
+            list-style-type: none;
+            padding-left: 25px;
+        }
+        .sport-recommendations li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 10px;
+            color: #5b21b6;
+        }
+        .sport-recommendations li:before {
+            content: "🏅";
+            position: absolute;
+            left: -25px;
+            font-size: 16px;
+        }
+
+        /* 像素小人样式 */
+        .pixel-character {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            height: 200px;
+        }
+
+        .pixel-person {
+            position: relative;
+            width: 140px;
+            height: 180px;
+            image-rendering: pixelated;
+        }
+
+        /* 瞬燃者 - 拳击 */
+        .瞬燃者 .pixel-person {
+            animation: punch 0.5s steps(2) infinite;
+        }
+        .瞬燃者 .pixel-person .head { background: #ffcc99; }
+        .瞬燃者 .pixel-person .body { background: #cc0000; }
+        .瞬燃者 .pixel-person .arm-left { background: #ff6644; }
+        .瞬燃者 .pixel-person .arm-right { background: #ff6644; }
+        .瞬燃者 .pixel-person .leg-left { background: #333366; }
+        .瞬燃者 .pixel-person .leg-right { background: #333366; }
+        .瞬燃者 .pixel-person .glove-left, .瞬燃者 .pixel-person .glove-right { background: #ffaa00; }
+        .瞬燃者 .pixel-person .fire { background: #ff6600; animation: fire-flicker 0.2s steps(1) infinite; }
+
+        /* 瞬燃者拳击姿态 */
+        .瞬燃者 .pixel-person .arm-left {
+            transform-origin: top center;
+            animation: punch-left 0.5s steps(2) infinite;
+        }
+        .瞬燃者 .pixel-person .arm-right {
+            transform-origin: top center;
+            animation: punch-right 0.5s steps(2) infinite;
+        }
+
+        /* 破浪者 - 游泳 */
+        .破浪者 .pixel-person {
+            animation: swim 1s ease-in-out infinite;
+        }
+        .破浪者 .pixel-person .head { background: #aaddff; }
+        .破浪者 .pixel-person .body { background: #2266cc; }
+        .破浪者 .pixel-person .arm-left { background: #66aaff; }
+        .破浪者 .pixel-person .arm-right { background: #66aaff; }
+        .破浪者 .pixel-person .leg-left { background: #1155bb; }
+        .破浪者 .pixel-person .leg-right { background: #1155bb; }
+        .破浪者 .pixel-person .swim-cap { background: #ff6600; }
+        .破浪者 .pixel-person .water { background: linear-gradient(90deg, #4488ff, #88ccff, #4488ff); animation: water-flow 1.5s linear infinite; }
+
+        /* 破浪者游泳姿态 */
+        .破浪者 .pixel-person .arm-left {
+            transform-origin: top center;
+            animation: swim-arm-left 1s ease-in-out infinite;
+        }
+        .破浪者 .pixel-person .arm-right {
+            transform-origin: top center;
+            animation: swim-arm-right 1s ease-in-out infinite;
+        }
+        .破浪者 .pixel-person .leg-left, .破浪者 .pixel-person .leg-right {
+            animation: swim-legs 1s ease-in-out infinite;
+        }
+
+        /* 恒温者 - 太极 */
+        .恒温者 .pixel-person {
+            animation: tai-chi 4s ease-in-out infinite;
+        }
+        .恒温者 .pixel-person .head { background: #ffe4cc; }
+        .恒温者 .pixel-person .body { background: #88aa55; }
+        .恒温者 .pixel-person .arm-left { background: #aadd77; }
+        .恒温者 .pixel-person .arm-right { background: #aadd77; }
+        .恒温者 .pixel-person .leg-left { background: #668844; }
+        .恒温者 .pixel-person .leg-right { background: #668844; }
+        .恒温者 .pixel-person .tai-chi-symbol { animation: tai-chi-spin 8s linear infinite; }
+
+        /* 恒温者太极姿态 */
+        .恒温者 .pixel-person .arm-left {
+            transform-origin: top center;
+            animation: tai-chi-arm-left 4s ease-in-out infinite;
+        }
+        .恒温者 .pixel-person .arm-right {
+            transform-origin: top center;
+            animation: tai-chi-arm-right 4s ease-in-out infinite;
+        }
+        .恒温者 .pixel-person .leg-left {
+            transform-origin: top center;
+            animation: tai-chi-leg-left 4s ease-in-out infinite;
+        }
+
+        /* 轻盈者 - 瑜伽 */
+        .轻盈者 .pixel-person {
+            animation: yoga 3s ease-in-out infinite;
+        }
+        .轻盈者 .pixel-person .head { background: #ffccdd; }
+        .轻盈者 .pixel-person .body { background: #cc66aa; }
+        .轻盈者 .pixel-person .arm-left { background: #ee88cc; }
+        .轻盈者 .pixel-person .arm-right { background: #ee88cc; }
+        .轻盈者 .pixel-person .leg-left { background: #aa5588; }
+        .轻盈者 .pixel-person .leg-right { background: #aa5588; }
+        .轻盈者 .pixel-person .yoga-mat { background: #88ddaa; }
+        .轻盈者 .pixel-person .sparkle { color: #ff99ff; animation: sparkle-twinkle 0.8s ease-in-out infinite; }
+
+        /* 轻盈者瑜伽姿态 */
+        .轻盈者 .pixel-person .arm-left {
+            transform-origin: top center;
+            animation: yoga-arm-left 3s ease-in-out infinite;
+        }
+        .轻盈者 .pixel-person .arm-right {
+            transform-origin: top center;
+            animation: yoga-arm-right 3s ease-in-out infinite;
+        }
+        .轻盈者 .pixel-person .leg-right {
+            transform-origin: top center;
+            animation: yoga-leg-right 3s ease-in-out infinite;
+        }
+
+        /* 像素小人身体部位 */
+        .pixel-person .head {
+            position: absolute;
+            top: 10px;
+            left: 45px;
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+        }
+
+        .pixel-person .eye-left, .pixel-person .eye-right {
+            position: absolute;
+            width: 8px;
+            height: 10px;
+            background: #333;
+            top: 14px;
+            border-radius: 2px;
+        }
+        .pixel-person .eye-left { left: 10px; }
+        .pixel-person .eye-right { right: 10px; }
+
+        .pixel-person .mouth {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 6px;
+            background: #ff9999;
+            border-radius: 3px;
+        }
+
+        .pixel-person .body {
+            position: absolute;
+            top: 64px;
+            left: 40px;
+            width: 60px;
+            height: 55px;
+            border-radius: 6px;
+        }
+
+        .pixel-person .arm-left, .pixel-person .arm-right {
+            position: absolute;
+            top: 68px;
+            width: 18px;
+            height: 45px;
+            border-radius: 4px;
+        }
+        .pixel-person .arm-left { left: 16px; }
+        .pixel-person .arm-right { right: 16px; }
+
+        .pixel-person .leg-left, .pixel-person .leg-right {
+            position: absolute;
+            top: 124px;
+            width: 22px;
+            height: 55px;
+            border-radius: 6px;
+        }
+        .pixel-person .leg-left { left: 48px; }
+        .pixel-person .leg-right { right: 48px; }
+
+        /* 瞬燃者拳击手套 */
+        .pixel-person .glove-left, .pixel-person .glove-right {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            bottom: -4px;
+        }
+        .pixel-person .glove-left { left: -3px; }
+        .pixel-person .glove-right { right: -3px; }
+
+        /* 瞬燃者火焰特效 */
+        .pixel-person .fire {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 35px;
+            clip-path: polygon(0% 100%, 8% 55%, 18% 95%, 28% 45%, 38% 90%, 50% 35%, 62% 90%, 72% 45%, 82% 95%, 92% 55%, 100% 100%);
+        }
+
+        /* 破浪者泳帽 */
+        .pixel-person .swim-cap {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 54px;
+            height: 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* 破浪者水花 */
+        .pixel-person .water {
+            position: absolute;
+            bottom: 0;
+            left: -20px;
+            width: 180px;
+            height: 25px;
+            border-radius: 0 0 50% 50%;
+            opacity: 0.7;
+        }
+
+        /* 恒温者太极图 */
+        .pixel-person .tai-chi-symbol {
+            position: absolute;
+            top: 30px;
+            right: -30px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #000 50%, #fff 50%);
+        }
+        .pixel-person .tai-chi-symbol::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 50%;
+            height: 50%;
+            background: #000;
+            border-radius: 50%;
+            transform: translateY(-100%);
+        }
+        .pixel-person .tai-chi-symbol::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 50%;
+            height: 50%;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        /* 轻盈者瑜伽垫 */
+        .pixel-person .yoga-mat {
+            position: absolute;
+            bottom: -10px;
+            left: -15px;
+            width: 170px;
+            height: 15px;
+            border-radius: 8px;
+        }
+
+        /* 轻盈者星星 */
+        .pixel-person .sparkle {
+            position: absolute;
+            font-size: 18px;
+        }
+        .pixel-person .sparkle:nth-child(1) { top: -8px; left: 15px; animation-delay: 0s; }
+        .pixel-person .sparkle:nth-child(2) { top: 10px; right: 5px; animation-delay: 0.3s; }
+        .pixel-person .sparkle:nth-child(3) { top: 40px; left: 0px; animation-delay: 0.6s; }
+
+        /* 动画关键帧 */
+        @keyframes punch {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(8px); }
+        }
+
+        @keyframes punch-left {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(45deg); }
+        }
+
+        @keyframes punch-right {
+            0%, 100% { transform: rotate(15deg); }
+            50% { transform: rotate(-45deg); }
+        }
+
+        @keyframes fire-flicker {
+            0%, 100% { opacity: 1; transform: scaleY(1) translateX(-50%); }
+            50% { opacity: 0.7; transform: scaleY(0.7) translateX(-50%); }
+        }
+
+        @keyframes swim {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(-3deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(5px) rotate(3deg); }
+        }
+
+        @keyframes swim-arm-left {
+            0%, 100% { transform: rotate(-60deg); }
+            50% { transform: rotate(60deg); }
+        }
+
+        @keyframes swim-arm-right {
+            0%, 100% { transform: rotate(60deg); }
+            50% { transform: rotate(-60deg); }
+        }
+
+        @keyframes swim-legs {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        @keyframes water-flow {
+            0% { background-position: 0 0; }
+            100% { background-position: 180px 0; }
+        }
+
+        @keyframes tai-chi {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(3deg); }
+            75% { transform: rotate(-3deg); }
+        }
+
+        @keyframes tai-chi-arm-left {
+            0%, 100% { transform: rotate(30deg) translateY(-5px); }
+            50% { transform: rotate(-30deg) translateY(5px); }
+        }
+
+        @keyframes tai-chi-arm-right {
+            0%, 100% { transform: rotate(-30deg) translateY(5px); }
+            50% { transform: rotate(30deg) translateY(-5px); }
+        }
+
+        @keyframes tai-chi-leg-left {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        @keyframes tai-chi-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes yoga {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-5deg); }
+        }
+
+        @keyframes yoga-arm-left {
+            0%, 100% { transform: rotate(-45deg); }
+            50% { transform: rotate(-70deg); }
+        }
+
+        @keyframes yoga-arm-right {
+            0%, 100% { transform: rotate(45deg); }
+            50% { transform: rotate(70deg); }
+        }
+
+        @keyframes yoga-leg-right {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        @keyframes sparkle-twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.6); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.2; transform: scale(0.9); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+
+        @keyframes float-up {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.6); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>M-SPORT 运动人格测试</h1>
+        
+        <div id="test-container">
+            <div class="question" id="question-container">
+                <p id="question-number">问题 1/10</p>
+                <p id="question-text">当你有空闲时间时，你更倾向于：</p>
+                <div class="options" id="options-container">
+                    <div class="option" data-index="0">进行高强度的运动，如跑步、健身</div>
+                    <div class="option" data-index="1">进行低强度的运动，如瑜伽、散步</div>
+                    <div class="option" data-index="2">进行有规律的长期运动计划</div>
+                    <div class="option" data-index="3">根据心情随意选择运动方式</div>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button class="button" id="prev-button" disabled>上一题</button>
+                <button class="button" id="next-button">下一题</button>
+            </div>
+        </div>
+        
+        <div id="result-container" style="display: none;">
+            <div class="result">
+                <h2>测试结果</h2>
+                <p id="result-personality">你的主要运动人格：</p>
+                
+                <div id="pixel-character" class="pixel-character">
+                    <div id="pixel-person" class="pixel-person">
+                        <div class="head">
+                            <div class="eye-left"></div>
+                            <div class="eye-right"></div>
+                            <div class="mouth"></div>
+                        </div>
+                        <div class="body"></div>
+                        <div id="arm-left" class="arm-left"></div>
+                        <div id="arm-right" class="arm-right"></div>
+                        <div class="leg-left"></div>
+                        <div class="leg-right"></div>
+                    </div>
+                </div>
+                
+                <div class="personality-info">
+                    <h3 id="personality-title">特质</h3>
+                    <p id="personality-trait"></p>
+                </div>
+                
+                <div class="sport-recommendations">
+                    <h3>推荐运动</h3>
+                    <ul id="recommendations-list"></ul>
+                </div>
+                
+                <button class="button" id="restart-button">重新测试</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 定义测试问题
+        const questions = [
+            {
+                id: 1,
+                text: '当你有空闲时间时，你更倾向于：',
+                options: [
+                    { text: '进行高强度的运动，如跑步、健身', points: { 瞬燃者: 3, 破浪者: 2, 恒温者: 0, 轻盈者: 0 } },
+                    { text: '进行低强度的运动，如瑜伽、散步', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 2, 轻盈者: 3 } },
+                    { text: '进行有规律的长期运动计划', points: { 瞬燃者: 0, 破浪者: 3, 恒温者: 2, 轻盈者: 0 } },
+                    { text: '根据心情随意选择运动方式', points: { 瞬燃者: 2, 破浪者: 0, 恒温者: 0, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 2,
+                text: '你如何看待运动中的挑战？',
+                options: [
+                    { text: '喜欢挑战高难度动作，追求突破', points: { 瞬燃者: 3, 破浪者: 2, 恒温者: 0, 轻盈者: 0 } },
+                    { text: '享受循序渐进的过程，不急于求成', points: { 瞬燃者: 0, 破浪者: 1, 恒温者: 3, 轻盈者: 2 } },
+                    { text: '注重运动的持续性，而非强度', points: { 瞬燃者: 0, 破浪者: 2, 恒温者: 3, 轻盈者: 1 } },
+                    { text: '运动应该是轻松愉快的，避免过度挑战', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 1, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 3,
+                text: '你更喜欢哪种运动环境？',
+                options: [
+                    { text: '户外，如公园、操场', points: { 瞬燃者: 2, 破浪者: 3, 恒温者: 2, 轻盈者: 1 } },
+                    { text: '室内，如健身房、瑜伽馆', points: { 瞬燃者: 3, 破浪者: 1, 恒温者: 2, 轻盈者: 2 } },
+                    { text: '自然环境，如森林、海滩', points: { 瞬燃者: 1, 破浪者: 2, 恒温者: 3, 轻盈者: 3 } },
+                    { text: '家中，方便随时运动', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 2, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 4,
+                text: '你运动的主要目的是：',
+                options: [
+                    { text: '快速燃烧卡路里，保持身材', points: { 瞬燃者: 3, 破浪者: 2, 恒温者: 1, 轻盈者: 0 } },
+                    { text: '增强体质，提高健康水平', points: { 瞬燃者: 1, 破浪者: 3, 恒温者: 3, 轻盈者: 1 } },
+                    { text: '放松心情，缓解压力', points: { 瞬燃者: 0, 破浪者: 1, 恒温者: 2, 轻盈者: 3 } },
+                    { text: '挑战自我，突破极限', points: { 瞬燃者: 3, 破浪者: 3, 恒温者: 0, 轻盈者: 0 } }
+                ]
+            },
+            {
+                id: 5,
+                text: '你如何安排运动时间？',
+                options: [
+                    { text: '每天固定时间运动', points: { 瞬燃者: 1, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '有空就运动，没有固定时间', points: { 瞬燃者: 3, 破浪者: 0, 恒温者: 0, 轻盈者: 3 } },
+                    { text: '每周制定运动计划，严格执行', points: { 瞬燃者: 0, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '根据心情和状态决定是否运动', points: { 瞬燃者: 2, 破浪者: 0, 恒温者: 1, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 6,
+                text: '你更喜欢哪种运动类型？',
+                options: [
+                    { text: '有氧运动，如跑步、游泳', points: { 瞬燃者: 3, 破浪者: 3, 恒温者: 2, 轻盈者: 0 } },
+                    { text: '力量训练，如举重、器械', points: { 瞬燃者: 3, 破浪者: 2, 恒温者: 1, 轻盈者: 0 } },
+                    { text: '柔韧性训练，如瑜伽、普拉提', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 2, 轻盈者: 3 } },
+                    { text: '休闲运动，如散步、太极', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 3, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 7,
+                text: '你如何看待运动中的竞争？',
+                options: [
+                    { text: '喜欢竞争，追求胜利', points: { 瞬燃者: 3, 破浪者: 3, 恒温者: 0, 轻盈者: 0 } },
+                    { text: '注重参与，享受过程', points: { 瞬燃者: 1, 破浪者: 2, 恒温者: 3, 轻盈者: 3 } },
+                    { text: '与自己竞争，不断进步', points: { 瞬燃者: 2, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '避免竞争，运动只是为了放松', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 1, 轻盈者: 3 } }
+                ]
+            },
+            {
+                id: 8,
+                text: '你运动时的节奏是：',
+                options: [
+                    { text: '快速、高强度', points: { 瞬燃者: 3, 破浪者: 2, 恒温者: 0, 轻盈者: 0 } },
+                    { text: '中速、稳定', points: { 瞬燃者: 0, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '慢速、放松', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 2, 轻盈者: 3 } },
+                    { text: '根据身体状况调整节奏', points: { 瞬燃者: 1, 破浪者: 1, 恒温者: 3, 轻盈者: 2 } }
+                ]
+            },
+            {
+                id: 9,
+                text: '你更倾向于哪种运动伙伴？',
+                options: [
+                    { text: '专业教练，指导我提高', points: { 瞬燃者: 3, 破浪者: 3, 恒温者: 2, 轻盈者: 0 } },
+                    { text: '朋友或家人，一起运动更有趣', points: { 瞬燃者: 2, 破浪者: 2, 恒温者: 2, 轻盈者: 3 } },
+                    { text: '独自运动，享受独处时光', points: { 瞬燃者: 0, 破浪者: 1, 恒温者: 3, 轻盈者: 3 } },
+                    { text: '运动社群，有共同目标', points: { 瞬燃者: 2, 破浪者: 3, 恒温者: 2, 轻盈者: 1 } }
+                ]
+            },
+            {
+                id: 10,
+                text: '你如何评价一次运动的成功？',
+                options: [
+                    { text: '达到了预定的运动目标', points: { 瞬燃者: 3, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '感觉轻松愉快，没有压力', points: { 瞬燃者: 0, 破浪者: 0, 恒温者: 1, 轻盈者: 3 } },
+                    { text: '坚持完成了运动计划', points: { 瞬燃者: 1, 破浪者: 3, 恒温者: 3, 轻盈者: 0 } },
+                    { text: '身体感觉舒适，没有疲劳', points: { 瞬燃者: 0, 破浪者: 1, 恒温者: 2, 轻盈者: 3 } }
+                ]
+            }
+        ];
+        
+        // 运动推荐数据
+        const sportRecommendations = {
+            瞬燃者: [
+                '高强度间歇训练 (HIIT)',
+                '短跑',
+                '篮球、足球等团队竞技运动',
+                '拳击、跆拳道等对抗性运动',
+                '攀岩等挑战性运动'
+            ],
+            破浪者: [
+                '马拉松、长距离跑步',
+                '骑行',
+                '游泳',
+                '户外徒步、登山',
+                '铁人三项'
+            ],
+            恒温者: [
+                '瑜伽',
+                '太极',
+                '散步、健走',
+                '普拉提',
+                '气功'
+            ],
+            轻盈者: [
+                '瑜伽',
+                '普拉提',
+                '散步、健走',
+                '舞蹈',
+                '冥想'
+            ]
+        };
+        
+        // 人格特质描述
+        const personalityTraits = {
+            瞬燃者: {
+                核心特质: '你是人间「瞬时燃火」，是把「心动」直接焊死在「行动」上的闪电玩家。 别人还在纠结「要不要动」，你已经换好装备冲出门；别人规划一周运动计划，你主打一个「当下即巅峰」。 30 分钟暴汗 HIIT 是你的日常，一场说走就走的夜跑是你的浪漫，你偏爱所有能瞬间点燃多巴胺的短平快快乐，拒绝漫长等待，讨厌拖沓内耗。 你是活动里永远第一个举手的气氛发动机，是朋友圈里「说动就动」的活力标杆，用每一次即刻出发，把生活过成永不降温的热烈现场。'
+            },
+            破浪者: {
+                核心特质: '你是自带「恒定引力」的「深海破浪者」，是把自律刻进时间刻度里的长期战神。 别人的运动是「三天打鱼两天晒网」，你的运动是「朝暮不辍的自我雕刻」。 晨跑的风、健身房的器械、马拉松的赛道，都是你对抗平庸的战场；日复一日的高强度坚持，不是任务，而是你与世界对话的方式。 你不满足于「动过」，只追求「极致」，在长期的深耕里活成自带光芒的美力标杆，更用自己的热爱，拉着身边人一起冲破舒适区，奔赴运动与善意的山海，是人群里永远的「领光者」。'
+            },
+            恒温者: {
+                核心特质: '你是人间「恒温慢流」，是在快节奏世界里，守着自己一方温柔天地的生活艺术家。不追速度，不卷强度，不跟风打卡，只偏爱所有能让身心舒展的慢节奏律动：清晨公园的瑜伽、傍晚江边的漫步、睡前灯下的拉伸，都是你与自己对话的温柔仪式。你像一条恒定流动的河，不疾不徐，不慌不忙，用日复一日的稳定坚持，在喧嚣里守住自己的节奏。运动于你，从来不是「任务」，而是「悦己」，在一呼一吸间，把生活过成松弛、自洽、温柔且有力量的模样，是自带治愈感的「人间慢镜头」。'
+            },
+            轻盈者: {
+                核心特质: '你是人间「风里轻盈」，是把「轻松变美」刻进 DNA 的无压玩家，是运动界的「快乐松弛天花板」。 拒绝高强度内耗，讨厌任务式打卡，只偏爱所有「零负担、高颜值、好上手」的轻运动：15 分钟晨间拉伸、氛围感拉满的 citywalk、和朋友的快乐羽毛球局、一节有趣的尊巴课，都是你悄悄变美的小心机。 你参与感拉满，但绝不被压力绑架：想动就动，不想动就摆烂，主打一个「快乐至上」。 你把运动变成日常的精致加分项，用最轻松的方式，活成灵动、元气、永远轻盈的样子，是把「舒服」和「变美」平衡到极致的生活玩家。'
+            }
+        };
+        
+        // 全局变量
+        let currentQuestion = 0;
+        let answers = [];
+        
+        // DOM元素
+        const testContainer = document.getElementById('test-container');
+        const resultContainer = document.getElementById('result-container');
+        const questionNumber = document.getElementById('question-number');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const resultPersonality = document.getElementById('result-personality');
+        const pixelCharacter = document.getElementById('pixel-character');
+        const pixelPerson = document.getElementById('pixel-person');
+        const personalityTitle = document.getElementById('personality-title');
+        const personalityTrait = document.getElementById('personality-trait');
+        const personalityNeed = document.getElementById('personality-need');
+        const recommendationsList = document.getElementById('recommendations-list');
+        const restartButton = document.getElementById('restart-button');
+        
+        // 初始化
+        function init() {
+            loadQuestion();
+            bindEvents();
+        }
+        
+        // 加载问题
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionNumber.textContent = `问题 ${currentQuestion + 1}/${questions.length}`;
+            questionText.textContent = question.text;
+            
+            // 清空选项
+            optionsContainer.innerHTML = '';
+            
+            // 添加选项
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option.text;
+                optionElement.dataset.index = index;
+                
+                // 恢复选中状态
+                if (answers[currentQuestion] === index) {
+                    optionElement.classList.add('selected');
+                }
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // 更新按钮状态
+            prevButton.disabled = currentQuestion === 0;
+            nextButton.textContent = currentQuestion === questions.length - 1 ? '提交' : '下一题';
+        }
+        
+        // 绑定事件
+        function bindEvents() {
+            // 选项点击事件
+            optionsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('option')) {
+                    // 移除其他选项的选中状态
+                    document.querySelectorAll('.option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // 添加当前选项的选中状态
+                    e.target.classList.add('selected');
+                    
+                    // 保存答案
+                    answers[currentQuestion] = parseInt(e.target.dataset.index);
+                }
+            });
+            
+            // 上一题按钮点击事件
+            prevButton.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    loadQuestion();
+                }
+            });
+            
+            // 下一题按钮点击事件
+            nextButton.addEventListener('click', () => {
+                // 检查是否选择了选项
+                if (answers[currentQuestion] === undefined) {
+                    alert('请选择一个选项');
+                    return;
+                }
+                
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    loadQuestion();
+                } else {
+                    // 计算结果
+                    calculateResults();
+                }
+            });
+            
+            // 重新测试按钮点击事件
+            restartButton.addEventListener('click', () => {
+                currentQuestion = 0;
+                answers = [];
+                pixelCharacter.className = 'pixel-character';
+                const effects = pixelPerson.querySelectorAll('.fire, .wave, .aura, .sparkle');
+                effects.forEach(e => e.remove());
+                testContainer.style.display = 'block';
+                resultContainer.style.display = 'none';
+                loadQuestion();
+            });
+        }
+        
+        // 计算结果
+        function calculateResults() {
+            const scores = {
+                瞬燃者: 0,
+                破浪者: 0,
+                恒温者: 0,
+                轻盈者: 0
+            };
+            
+            answers.forEach((answerIndex, questionIndex) => {
+                const question = questions[questionIndex];
+                const option = question.options[answerIndex];
+                
+                Object.entries(option.points).forEach(([personality, point]) => {
+                    scores[personality] += point;
+                });
+            });
+            
+            // 确定主要运动人格
+            let maxScore = 0;
+            let mainPersonality = '';
+            Object.entries(scores).forEach(([personality, score]) => {
+                if (score > maxScore) {
+                    maxScore = score;
+                    mainPersonality = personality;
+                }
+            });
+            
+            // 显示结果
+            resultPersonality.textContent = `你的主要运动人格：${mainPersonality}`;
+            pixelCharacter.className = `pixel-character ${mainPersonality}`;
+            
+            // 清除之前的特效和道具
+            const effects = pixelPerson.querySelectorAll('.fire, .wave, .aura, .sparkle, .swim-cap, .water, .tai-chi-symbol, .yoga-mat, .glove-left, .glove-right');
+            effects.forEach(e => e.remove());
+            
+            // 添加对应人格的道具和特效
+            if (mainPersonality === '瞬燃者') {
+                const fire = document.createElement('div');
+                fire.className = 'fire';
+                pixelPerson.appendChild(fire);
+                
+                const gloveLeft = document.createElement('div');
+                gloveLeft.className = 'glove-left';
+                document.getElementById('arm-left').appendChild(gloveLeft);
+                
+                const gloveRight = document.createElement('div');
+                gloveRight.className = 'glove-right';
+                document.getElementById('arm-right').appendChild(gloveRight);
+            } else if (mainPersonality === '破浪者') {
+                const swimCap = document.createElement('div');
+                swimCap.className = 'swim-cap';
+                pixelPerson.appendChild(swimCap);
+                
+                const water = document.createElement('div');
+                water.className = 'water';
+                pixelPerson.appendChild(water);
+            } else if (mainPersonality === '恒温者') {
+                const taiChiSymbol = document.createElement('div');
+                taiChiSymbol.className = 'tai-chi-symbol';
+                pixelPerson.appendChild(taiChiSymbol);
+            } else if (mainPersonality === '轻盈者') {
+                for (let i = 0; i < 3; i++) {
+                    const sparkle = document.createElement('span');
+                    sparkle.className = 'sparkle';
+                    sparkle.textContent = '✦';
+                    pixelPerson.appendChild(sparkle);
+                }
+                
+                const yogaMat = document.createElement('div');
+                yogaMat.className = 'yoga-mat';
+                pixelPerson.appendChild(yogaMat);
+            }
+            
+            personalityTitle.textContent = `${mainPersonality} 特质`;
+            personalityTrait.textContent = `${personalityTraits[mainPersonality].核心特质}`;
+            
+            // 显示推荐运动
+            recommendationsList.innerHTML = '';
+            sportRecommendations[mainPersonality].forEach(sport => {
+                const li = document.createElement('li');
+                li.textContent = sport;
+                recommendationsList.appendChild(li);
+            });
+            
+            // 切换显示
+            testContainer.style.display = 'none';
+            resultContainer.style.display = 'block';
+        }
+        
+        // 初始化应用
+        init();
+    </script>
+</body>
+</html>
